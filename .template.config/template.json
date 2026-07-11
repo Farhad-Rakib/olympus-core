@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Farhad Rakib",
+  "classifications": [
+    "Web",
+    "WebAPI",
+    "Clean Architecture",
+    "EF Core",
+    "Dapper",
+    "PostgreSQL",
+    "SQL Server",
+    "JWT",
+    "RBAC"
+  ],
+  "identity": "OlympusCore.CleanArchitecture.WebApi",
+  "name": "OlympusCore",
+  "shortName": "olympuscore",
+  "sourceName": "ProjectNamePlaceholder",
+  "preferNameDirectory": true,
+  "primaryOutputs": [
+    {
+      "path": "ProjectNamePlaceholder.sln"
+    }
+  ],
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(orm == \"efcore\" )",
+          "exclude": [
+            "**/ProjectNamePlaceholder.Persistence/Dapper/**",
+            "**/ProjectNamePlaceholder.Persistence/Seeding/Dapper*.cs"
+          ]
+        },
+        {
+          "condition": "(orm == \"dapper\")",
+          "exclude": [
+            "src/ProjectNamePlaceholder.Persistence/Context/**",
+            "src/ProjectNamePlaceholder.Persistence/Configurations/**",
+            "src/ProjectNamePlaceholder.Persistence/Repositories/**",
+            "src/ProjectNamePlaceholder.Persistence/UnitOfWork.cs",
+            "src/ProjectNamePlaceholder.Persistence/Seeding/EfCoreDatabaseBootstrapper.cs",
+            "src/ProjectNamePlaceholder.Persistence/Seeding/RbacSeeder.cs"
+          ]
+        }
+      ]
+    }
+  ],
+  "symbols": {
+    "Company": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "MyCompany",
+      "description": "Root company/organization namespace segment"
+    },
+    "enableSeq": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Enable Seq sink in Serilog configuration",
+      "replaces": "__ENABLE_SEQ__"
+    },
+    "database": {
+      "type": "parameter",
+      "datatype": "choice",
+      "defaultValue": "postgres",
+      "description": "Database provider used by the persistence layer",
+      "replaces": "__DB_PROVIDER__",
+      "choices": [
+        {
+          "choice": "postgres",
+          "description": "PostgreSQL via Npgsql"
+        },
+        {
+          "choice": "sqlserver",
+          "description": "SQL Server via Microsoft.Data.SqlClient"
+        }
+      ]
+    },
+    "orm": {
+      "type": "parameter",
+      "datatype": "choice",
+      "defaultValue": "efcore",
+      "description": "ORM strategy for persistence layer",
+      "replaces": "__ORM__",
+      "choices": [
+        {
+          "choice": "efcore",
+          "description": "Entity Framework Core"
+        },
+        {
+          "choice": "dapper",
+          "description": "Dapper micro-ORM"
+        }
+      ]
+    }
+  },
+  "postActions": [
+    {
+      "condition": "(OS != \"Windows_NT\")",
+      "description": "Restore NuGet packages",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet restore'"
+        }
+      ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    }
+  ]
+}
