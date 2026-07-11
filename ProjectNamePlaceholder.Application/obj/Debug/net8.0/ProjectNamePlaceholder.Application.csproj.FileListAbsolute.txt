@@ -1,0 +1,16 @@
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/bin/Debug/net8.0/ProjectNamePlaceholder.Application.deps.json
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/bin/Debug/net8.0/ProjectNamePlaceholder.Application.dll
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/bin/Debug/net8.0/ProjectNamePlaceholder.Application.pdb
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/bin/Debug/net8.0/ProjectNamePlaceholder.Domain.dll
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/bin/Debug/net8.0/ProjectNamePlaceholder.Domain.pdb
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ProjectNamePlaceholder.Application.csproj.AssemblyReference.cache
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ProjectNamePlaceholder.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ProjectNamePlaceholder.Application.AssemblyInfoInputs.cache
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ProjectNamePlaceholder.Application.AssemblyInfo.cs
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ProjectNamePlaceholder.Application.csproj.CoreCompileInputs.cache
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ProjectN.77DA62CA.Up2Date
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ProjectNamePlaceholder.Application.dll
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/refint/ProjectNamePlaceholder.Application.dll
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ProjectNamePlaceholder.Application.pdb
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ref/ProjectNamePlaceholder.Application.dll
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/obj/Debug/net8.0/ProjectNamePlaceholder.Application.sourcelink.json

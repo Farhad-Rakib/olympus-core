@@ -1,0 +1,12 @@
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/bin/Debug/net8.0/ProjectNamePlaceholder.Domain.deps.json
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/bin/Debug/net8.0/ProjectNamePlaceholder.Domain.dll
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/bin/Debug/net8.0/ProjectNamePlaceholder.Domain.pdb
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/obj/Debug/net8.0/ProjectNamePlaceholder.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/obj/Debug/net8.0/ProjectNamePlaceholder.Domain.AssemblyInfoInputs.cache
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/obj/Debug/net8.0/ProjectNamePlaceholder.Domain.AssemblyInfo.cs
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/obj/Debug/net8.0/ProjectNamePlaceholder.Domain.csproj.CoreCompileInputs.cache
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/obj/Debug/net8.0/ProjectNamePlaceholder.Domain.dll
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/obj/Debug/net8.0/refint/ProjectNamePlaceholder.Domain.dll
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/obj/Debug/net8.0/ProjectNamePlaceholder.Domain.pdb
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/obj/Debug/net8.0/ref/ProjectNamePlaceholder.Domain.dll
+/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Domain/obj/Debug/net8.0/ProjectNamePlaceholder.Domain.sourcelink.json

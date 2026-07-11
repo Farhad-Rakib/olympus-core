@@ -1,0 +1,91 @@
+2026-05-17 18:39:26.966 +06:00 [DBG] Starting database bootstrapper...
+2026-05-17 18:39:27.020 +06:00 [DBG] Attempting database connection and migration...
+2026-05-17 18:39:27.640 +06:00 [DBG] Database migration applied successfully.
+2026-05-17 18:39:27.640 +06:00 [DBG] Seeding RBAC data...
+2026-05-17 18:39:27.844 +06:00 [INF] RBAC seed completed successfully.
+2026-05-17 18:39:27.844 +06:00 [DBG] RBAC seeding complete.
+2026-05-17 18:39:27.844 +06:00 [DBG] Seeding default user...
+2026-05-17 18:39:27.902 +06:00 [DBG] Default user seeding complete.
+2026-05-17 18:39:27.902 +06:00 [DBG] Seeding site settings...
+2026-05-17 18:39:27.915 +06:00 [DBG] Site settings seeding complete.
+2026-05-17 18:39:27.915 +06:00 [DBG] Seeding menu data...
+2026-05-17 18:39:27.934 +06:00 [DBG] Menu seeding complete.
+2026-05-17 18:39:27.934 +06:00 [DBG] Database bootstrapper finished.
+2026-05-17 18:39:27.960 +06:00 [DBG] Menu permission validation passed.
+2026-05-17 18:39:27.963 +06:00 [DBG] Permissions already in sync
+2026-05-17 18:39:27.965 +06:00 [WRN] Could not reach Seq at http://localhost:5341
+System.Net.Http.HttpRequestException: Connection refused (localhost:5341)
+ ---> System.Net.Sockets.SocketException (61): Connection refused
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Program.<Main>$(String[] args) in /Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Api/Program.cs:line 272
+2026-05-17 18:39:27.968 +06:00 [DBG] App is running on: default Kestrel port
+2026-05-17 19:35:40.059 +06:00 [DBG] Starting database bootstrapper...
+2026-05-17 19:35:40.100 +06:00 [DBG] Attempting database connection and migration...
+2026-05-17 19:35:40.465 +06:00 [DBG] Database migration applied successfully.
+2026-05-17 19:35:40.465 +06:00 [DBG] Seeding RBAC data...
+2026-05-17 19:35:40.640 +06:00 [INF] RBAC seed completed successfully.
+2026-05-17 19:35:40.640 +06:00 [DBG] RBAC seeding complete.
+2026-05-17 19:35:40.640 +06:00 [DBG] Seeding default user...
+2026-05-17 19:35:40.648 +06:00 [DBG] Default user seeding complete.
+2026-05-17 19:35:40.648 +06:00 [DBG] Seeding site settings...
+2026-05-17 19:35:40.655 +06:00 [DBG] Site settings seeding complete.
+2026-05-17 19:35:40.655 +06:00 [DBG] Seeding menu data...
+2026-05-17 19:35:40.673 +06:00 [DBG] Menu seeding complete.
+2026-05-17 19:35:40.673 +06:00 [DBG] Database bootstrapper finished.
+2026-05-17 19:35:40.700 +06:00 [DBG] Menu permission validation passed.
+2026-05-17 19:35:40.703 +06:00 [DBG] Permissions already in sync
+2026-05-17 19:35:40.705 +06:00 [WRN] Could not reach Seq at http://localhost:5341
+System.Net.Http.HttpRequestException: Connection refused (localhost:5341)
+ ---> System.Net.Sockets.SocketException (61): Connection refused
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Program.<Main>$(String[] args) in /Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Api/Program.cs:line 272
+2026-05-17 19:35:40.708 +06:00 [DBG] App is running on: default Kestrel port
+2026-05-17 19:35:40.816 +06:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address https://127.0.0.1:5001: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+ ---> System.Net.Sockets.SocketException (48): Address already in use
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)

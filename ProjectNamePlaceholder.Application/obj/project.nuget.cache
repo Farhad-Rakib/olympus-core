@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "Bu1tlwnoGWI=",
+  "success": true,
+  "projectFilePath": "/Users/farhadrakib/Personal Projects/olympusCore/src/ProjectNamePlaceholder.Application/ProjectNamePlaceholder.Application.csproj",
+  "expectedPackageFiles": [
+    "/Users/farhadrakib/.nuget/packages/fluentvalidation/11.10.0/fluentvalidation.11.10.0.nupkg.sha512",
+    "/Users/farhadrakib/.nuget/packages/fluentvalidation.dependencyinjectionextensions/11.10.0/fluentvalidation.dependencyinjectionextensions.11.10.0.nupkg.sha512",
+    "/Users/farhadrakib/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.2/microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "/Users/farhadrakib/.nuget/packages/microsoft.extensions.options/8.0.0/microsoft.extensions.options.8.0.0.nupkg.sha512",
+    "/Users/farhadrakib/.nuget/packages/microsoft.extensions.primitives/8.0.0/microsoft.extensions.primitives.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

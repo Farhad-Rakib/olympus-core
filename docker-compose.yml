@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Application - Development
+  api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: projectnameplaceholder-api-dev
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:5001;http://+:5000
+      ConnectionStrings__PostgresConnection: ${DEV_DB_CONNECTION_STRING:-Host=your-db-host;Port=5432;Database=ProjectNamePlaceholderDb;Username=postgres;Password=postgres}
+      Jwt__SecretKey: your-super-secret-key-must-be-at-least-32-characters-long
+      Jwt__Issuer: ProjectNamePlaceholder
+      Jwt__Audience: ProjectNamePlaceholder.Client
+      Jwt__ExpiryMinutes: 60
+      Jwt__RefreshTokenExpiryDays: 7
+      Smtp__Host: mailhog
+      Smtp__Port: 1025
+      Smtp__Username: test
+      Smtp__Password: test
+      Smtp__FromAddress: no-reply@project.local
+      Serilog__MinimumLevel__Default: Debug
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    volumes:
+      - .:/src
+    networks:
+      - projectnameplaceholder-network
+    profiles:
+      - dev
+
+  # Application - Staging (Simulated)
+  api-staging:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: projectnameplaceholder-api-staging
+    environment:
+      ASPNETCORE_ENVIRONMENT: Staging
+      ASPNETCORE_URLS: https://+:5001
+      ConnectionStrings__PostgresConnection: ${STAGING_DB_CONNECTION_STRING:-Host=your-db-host;Port=5432;Database=ProjectNamePlaceholderDb;Username=postgres;Password=postgres}
+      Jwt__SecretKey: staging-super-secret-key-must-be-at-least-32-characters-long
+      Jwt__Issuer: ProjectNamePlaceholder
+      Jwt__Audience: ProjectNamePlaceholder.Client
+      Smtp__Host: mailhog
+      Smtp__Port: 1025
+      Smtp__FromAddress: no-reply@staging.project.local
+      Serilog__MinimumLevel__Default: Information
+    ports:
+      - "5002:5001"
+    networks:
+      - projectnameplaceholder-network
+    profiles:
+      - staging
+
+  # Application - Production (Simulated)
+  api-production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: projectnameplaceholder-api-production
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: https://+:5001
+      ConnectionStrings__PostgresConnection: ${PROD_DB_CONNECTION_STRING:-Host=your-db-host;Port=5432;Database=ProjectNamePlaceholderDb;Username=postgres;Password=postgres}
+      Jwt__SecretKey: production-super-secret-key-must-be-at-least-32-characters-long
+      Jwt__Issuer: ProjectNamePlaceholder
+      Jwt__Audience: ProjectNamePlaceholder.Client
+      Smtp__Host: mailhog
+      Smtp__Port: 1025
+      Smtp__FromAddress: no-reply@project.local
+      Serilog__MinimumLevel__Default: Warning
+    ports:
+      - "5003:5001"
+    networks:
+      - projectnameplaceholder-network
+    profiles:
+      - prod
+
+  # MailHog - Email Testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: projectnameplaceholder-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - projectnameplaceholder-network
+
+networks:
+  projectnameplaceholder-network:
+    driver: bridge
