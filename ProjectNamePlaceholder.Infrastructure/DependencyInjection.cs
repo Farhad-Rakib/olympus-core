@@ -2,7 +2,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectNamePlaceholder.Application.Common.Interfaces.Security;
 using ProjectNamePlaceholder.Application.Common.Interfaces.Services;
+using ProjectNamePlaceholder.Application.Auth.External;
+using ProjectNamePlaceholder.Application.Common.Configuration;
 using ProjectNamePlaceholder.Infrastructure.Authentication;
+using ProjectNamePlaceholder.Infrastructure.Authentication.External;
+using Microsoft.Extensions.Options;
 using ProjectNamePlaceholder.Infrastructure.Email;
 using ProjectNamePlaceholder.Infrastructure.Security;
 
@@ -20,6 +24,20 @@ public static class DependencyInjection
         services.AddScoped<IPasswordResetTokenGenerator, PasswordResetTokenGenerator>();
         services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
         services.AddScoped<IEmailService, SmtpEmailService>();
+
+        services.Configure<ExternalAuthOptions>(configuration.GetSection(ExternalAuthOptions.SectionName));
+        services.AddHttpClient(OAuthIdentityProvider.HttpClientName, client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(15);
+            // GitHub's API rejects requests without a User-Agent.
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("Olympus-ExternalAuth/1.0");
+        });
+        foreach (var provider in ExternalProviders.All)
+        {
+            var providerId = provider.Id;
+            services.AddScoped<IExternalIdentityProvider>(sp => new OAuthIdentityProvider(
+                providerId, sp.GetRequiredService<IHttpClientFactory>(), sp.GetRequiredService<IOptions<ExternalAuthOptions>>()));
+        }
 
         return services;
     }

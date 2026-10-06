@@ -31,6 +31,11 @@ public sealed class SiteSettingService : ISiteSettingService
 
     public async Task<SiteSettingDto> CreateOrUpdateAsync(SiteSettingDto dto, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(dto.Key))
+        {
+            throw new AppException("Setting key is required.", 400);
+        }
+
         // Validate palette JSON when saving palettes
         if (!string.IsNullOrWhiteSpace(dto.Key) && dto.Key.Contains("palette", StringComparison.OrdinalIgnoreCase))
         {
@@ -54,8 +59,8 @@ public sealed class SiteSettingService : ISiteSettingService
             var created = new SiteSetting
             {
                 Id =  dto.Id,
-                Key = dto.Key,
-                Value = dto.Value,
+                Key = dto.Key ?? string.Empty,
+                Value = dto.Value ?? string.Empty,
                 Description = dto.Description
             };
 
@@ -64,7 +69,7 @@ public sealed class SiteSettingService : ISiteSettingService
             return MapToDto(created);
         }
 
-        existing.Value = dto.Value;
+        existing.Value = dto.Value ?? string.Empty;
         existing.Description = dto.Description;
 
         _siteSettingRepository.Update(existing);

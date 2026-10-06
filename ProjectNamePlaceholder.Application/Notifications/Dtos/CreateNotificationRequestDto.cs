@@ -1,7 +1,8 @@
 namespace ProjectNamePlaceholder.Application.Notifications.Dtos;
 
 public sealed record CreateNotificationRequestDto(
-    Guid UserId,
+    long UserId,
     string Type,
+    string Title,
     string Message
 );

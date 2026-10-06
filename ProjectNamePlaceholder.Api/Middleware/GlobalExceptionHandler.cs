@@ -42,6 +42,12 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
                 StatusCodes.Status404NotFound,
                 new { Exception = nameof(NotFoundException) }
             ),
+            // Domain entities guard their invariants with ArgumentException.
+            ArgumentException argumentException => ApiResponse.FailureResponse(
+                argumentException.Message,
+                StatusCodes.Status400BadRequest,
+                new { Exception = nameof(ArgumentException) }
+            ),
             UnauthorizedAccessException => ApiResponse.FailureResponse(
                 "Unauthorized.",
                 StatusCodes.Status401Unauthorized,

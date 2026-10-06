@@ -30,7 +30,7 @@ public sealed class SelfOrPermissionAuthorizationHandler : AuthorizationHandler<
         var callerId = context.User.FindFirstValue(ClaimTypes.NameIdentifier)
             ?? context.User.FindFirstValue("sub");
 
-        if (string.IsNullOrWhiteSpace(callerId) || !Guid.TryParse(callerId, out _))
+        if (string.IsNullOrWhiteSpace(callerId) || !long.TryParse(callerId, out _))
         {
             return Task.CompletedTask;
         }

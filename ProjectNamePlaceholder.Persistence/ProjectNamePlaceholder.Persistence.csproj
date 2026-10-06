@@ -2,6 +2,9 @@
   <PropertyGroup>
     <AssemblyName>ProjectNamePlaceholder.Persistence</AssemblyName>
     <RootNamespace>ProjectNamePlaceholder.Persistence</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <!--#if (database == "sqlserver") -->
     <DefineConstants>$(DefineConstants);OLYMPUS_DB_SQLSERVER</DefineConstants>
     <!--#endif -->

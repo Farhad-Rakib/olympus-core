@@ -30,10 +30,13 @@ public static class Permissions
     public const string MenusUpdate = "menus.update";
     public const string MenusDelete = "menus.delete";
     public const string ReportsRead = "reports.read";
+    public const string AuditRead = "audit.read";
+    public const string AuditCreate = "audit.create";
     public const string SiteSettingsRead = "site-settings.read";
     public const string SiteSettingsCreate = "site-settings.create";
     public const string SiteSettingsUpdate = "site-settings.update";
     public const string SiteSettingsDelete = "site-settings.delete";
+    public const string NotificationsCreate = "notifications.create";
 
     public static readonly string[] All =
     [
@@ -62,10 +65,13 @@ public static class Permissions
         MenusUpdate,
         MenusDelete,
         ReportsRead,
+        AuditRead,
+        AuditCreate,
         SiteSettingsRead,
         SiteSettingsCreate,
         SiteSettingsUpdate,
         SiteSettingsDelete,
+        NotificationsCreate,
         SystemEndpointsRead,
         SystemCacheRead,
         SystemCacheFlush

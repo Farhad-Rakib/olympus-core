@@ -11,4 +11,7 @@ public interface IAuthService
     Task<ForgotPasswordResponseDto> ForgotPasswordAsync(ForgotPasswordRequestDto request, CancellationToken cancellationToken = default);
     Task ResetPasswordAsync(ResetPasswordRequestDto request, CancellationToken cancellationToken = default);
     Task ChangePasswordAsync(ChangePasswordRequestDto request, CancellationToken cancellationToken = default);
+
+    /// <summary>Issues tokens for an already-authenticated user (e.g. after external sign-in).</summary>
+    Task<AuthTokensDto> CreateSessionAsync(long userId, CancellationToken cancellationToken = default);
 }

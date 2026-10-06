@@ -5,13 +5,17 @@ namespace ProjectNamePlaceholder.Application.Menu
     public class MenuService : IMenuService
     {
         private readonly IMenuRepository _menuRepository;
+        private readonly ProjectNamePlaceholder.Application.Common.Interfaces.IPermissionRepository _permissionRepository;
+        private readonly ProjectNamePlaceholder.Application.Common.Interfaces.IUnitOfWork _unitOfWork;
         private readonly ProjectNamePlaceholder.Application.Common.Interfaces.IAppCache _cache;
 
         private readonly TimeSpan MenuCacheTtl;
 
-        public MenuService(IMenuRepository menuRepository, ProjectNamePlaceholder.Application.Common.Interfaces.IAppCache cache, Microsoft.Extensions.Options.IOptions<ProjectNamePlaceholder.Application.Common.Configuration.CachingOptions> cachingOptions)
+        public MenuService(IMenuRepository menuRepository, ProjectNamePlaceholder.Application.Common.Interfaces.IPermissionRepository permissionRepository, ProjectNamePlaceholder.Application.Common.Interfaces.IUnitOfWork unitOfWork, ProjectNamePlaceholder.Application.Common.Interfaces.IAppCache cache, Microsoft.Extensions.Options.IOptions<ProjectNamePlaceholder.Application.Common.Configuration.CachingOptions> cachingOptions)
         {
             _menuRepository = menuRepository;
+            _permissionRepository = permissionRepository;
+            _unitOfWork = unitOfWork;
             _cache = cache;
             MenuCacheTtl = TimeSpan.FromMinutes(cachingOptions?.Value?.MenusTtlMinutes ?? 30);
         }
@@ -86,6 +90,8 @@ namespace ProjectNamePlaceholder.Application.Menu
 
         public async Task<MenuDto> CreateAsync(CreateMenuRequestDto request, CancellationToken cancellationToken = default)
         {
+            await EnsurePermissionExistsAsync(request.RequiredPermission, cancellationToken);
+
             var entity = new Domain.Entities.Menu
             {
                 Title = request.Title,
@@ -96,6 +102,7 @@ namespace ProjectNamePlaceholder.Application.Menu
             };
 
             var created = await _menuRepository.CreateAsync(entity, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             // Invalidate caches
             await _cache.RemoveAsync("menus:tree", cancellationToken);
             await _cache.RemoveAsync("menus:all", cancellationToken);
@@ -106,6 +113,7 @@ namespace ProjectNamePlaceholder.Application.Menu
         {
             var menu = await _menuRepository.GetByIdAsync(id, cancellationToken);
             if (menu == null) throw new KeyNotFoundException("Menu not found");
+            await EnsurePermissionExistsAsync(request.RequiredPermission, cancellationToken);
 
             menu.Title = request.Title;
             menu.Url = request.Url;
@@ -114,6 +122,7 @@ namespace ProjectNamePlaceholder.Application.Menu
             menu.ParentMenuId = request.ParentMenuId;
 
             await _menuRepository.UpdateAsync(menu, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             await _cache.RemoveAsync("menus:tree", cancellationToken);
             await _cache.RemoveAsync("menus:all", cancellationToken);
         }
@@ -124,8 +133,19 @@ namespace ProjectNamePlaceholder.Application.Menu
             if (menu == null) throw new KeyNotFoundException("Menu not found");
 
             await _menuRepository.DeleteAsync(menu, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             await _cache.RemoveAsync("menus:tree", cancellationToken);
             await _cache.RemoveAsync("menus:all", cancellationToken);
+        }
+
+        private async Task EnsurePermissionExistsAsync(string? permission, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrWhiteSpace(permission)) return;
+
+            if (await _permissionRepository.GetByNameAsync(permission, cancellationToken) is null)
+            {
+                throw new ProjectNamePlaceholder.Application.Common.Exceptions.AppException($"Permission '{permission}' does not exist.", 400);
+            }
         }
 
         private MenuDto MapToDto(Domain.Entities.Menu m)

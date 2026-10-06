@@ -5,6 +5,7 @@ using ProjectNamePlaceholder.Application.Common.Interfaces.Security;
 using ProjectNamePlaceholder.Application.Common.Interfaces.Services;
 using ProjectNamePlaceholder.Application.Users.Dtos;
 using ProjectNamePlaceholder.Domain.Entities;
+using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -13,7 +14,6 @@ namespace ProjectNamePlaceholder.Application.Auth;
 public sealed class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
-    private readonly IRoleRepository _roleRepository;
     private readonly IPermissionRepository _permissionRepository;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly IPasswordResetTokenRepository _passwordResetTokenRepository;
@@ -23,10 +23,10 @@ public sealed class AuthService : IAuthService
     private readonly IPasswordResetTokenGenerator _passwordResetTokenGenerator;
     private readonly IEmailService _emailService;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<AuthService> _logger;
 
     public AuthService(
         IUserRepository userRepository,
-        IRoleRepository roleRepository,
         IPermissionRepository permissionRepository,
         IRefreshTokenRepository refreshTokenRepository,
         IPasswordResetTokenRepository passwordResetTokenRepository,
@@ -35,10 +35,10 @@ public sealed class AuthService : IAuthService
         IRefreshTokenGenerator refreshTokenGenerator,
         IPasswordResetTokenGenerator passwordResetTokenGenerator,
         IEmailService emailService,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        ILogger<AuthService> logger)
     {
         _userRepository = userRepository;
-        _roleRepository = roleRepository;
         _permissionRepository = permissionRepository;
         _refreshTokenRepository = refreshTokenRepository;
         _passwordResetTokenRepository = passwordResetTokenRepository;
@@ -48,6 +48,7 @@ public sealed class AuthService : IAuthService
         _passwordResetTokenGenerator = passwordResetTokenGenerator;
         _emailService = emailService;
         _unitOfWork = unitOfWork;
+        _logger = logger;
     }
 
     public async Task<AuthTokensDto> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken = default)
@@ -124,15 +125,6 @@ public sealed class AuthService : IAuthService
         var hashedPassword = _passwordHasher.Hash(request.Password);
         var user = new User(request.FullName, request.Email, hashedPassword);
 
-        var roles = await _roleRepository.GetByNamesAsync(request.Roles, cancellationToken);
-        user.SetRoles(roles.Select(role => new UserRole
-        {
-            UserId = user.Id,
-            RoleId = role.Id,
-            User = user,
-            Role = role
-        }));
-
         await _userRepository.AddAsync(user, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -141,7 +133,7 @@ public sealed class AuthService : IAuthService
             user.FullName,
             user.Email,
             user.IsActive,
-            roles.Select(r => r.Name).ToList()));
+            Array.Empty<string>()));
     }
 
     public async Task<ForgotPasswordResponseDto> ForgotPasswordAsync(Dtos.ForgotPasswordRequestDto request, CancellationToken cancellationToken = default)
@@ -175,7 +167,7 @@ public sealed class AuthService : IAuthService
             <p>If you didn't request this, please ignore this email.</p>
         ";
 
-        await _emailService.SendAsync(user.Email, "Password Reset Request", htmlBody, cancellationToken);
+        await SendEmailSafelyAsync(user.Email, "Password Reset Request", htmlBody, cancellationToken);
 
         return new ForgotPasswordResponseDto("If an account exists with this email, a password reset link has been sent.");
     }
@@ -220,7 +212,7 @@ public sealed class AuthService : IAuthService
             <p>If you didn't make this change, please contact support immediately.</p>
         ";
 
-        await _emailService.SendAsync(user.Email, "Password Reset Confirmation", htmlBody, cancellationToken);
+        await SendEmailSafelyAsync(user.Email, "Password Reset Confirmation", htmlBody, cancellationToken);
     }
 
     public async Task ChangePasswordAsync(Dtos.ChangePasswordRequestDto request, CancellationToken cancellationToken = default)
@@ -259,7 +251,32 @@ public sealed class AuthService : IAuthService
             <p>If you didn't make this change, please contact support immediately.</p>
         ";
 
-        await _emailService.SendAsync(user.Email, "Password Changed", htmlBody, cancellationToken);
+        await SendEmailSafelyAsync(user.Email, "Password Changed", htmlBody, cancellationToken);
+    }
+
+    public async Task<AuthTokensDto> CreateSessionAsync(long userId, CancellationToken cancellationToken = default)
+    {
+        var user = await _userRepository.GetByIdWithRolesAsync(userId, cancellationToken);
+        if (user is null || !user.IsActive)
+        {
+            throw new AppException("User is not active.", 401);
+        }
+
+        var permissions = await _permissionRepository.GetPermissionNamesForUserAsync(user.Id, cancellationToken);
+        return await GenerateAuthTokensAsync(user, permissions, cancellationToken);
+    }
+
+    // The account change is already saved; a mail outage must not turn it into a failed request.
+    private async Task SendEmailSafelyAsync(string to, string subject, string htmlBody, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _emailService.SendAsync(to, subject, htmlBody, cancellationToken);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogError(ex, "Failed to send '{Subject}' email", subject);
+        }
     }
 
     private async Task<AuthTokensDto> GenerateAuthTokensAsync(User user, IReadOnlyList<string> permissions, CancellationToken cancellationToken)

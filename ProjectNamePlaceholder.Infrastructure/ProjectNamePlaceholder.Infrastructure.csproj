@@ -3,6 +3,9 @@
     <AssemblyName>ProjectNamePlaceholder.Infrastructure</AssemblyName>
     <RootNamespace>ProjectNamePlaceholder.Infrastructure</RootNamespace>
     <OlympusEnableSeq>__ENABLE_SEQ__</OlympusEnableSeq>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(OlympusEnableSeq)' == 'True'">

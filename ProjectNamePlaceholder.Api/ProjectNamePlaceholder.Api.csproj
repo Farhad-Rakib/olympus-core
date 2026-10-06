@@ -2,6 +2,9 @@
   <PropertyGroup>
     <AssemblyName>ProjectNamePlaceholder.Api</AssemblyName>
     <RootNamespace>ProjectNamePlaceholder.Api</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

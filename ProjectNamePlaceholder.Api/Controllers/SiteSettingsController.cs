@@ -41,13 +41,14 @@ public sealed class SiteSettingsController : ControllerBase
         return Ok(ApiResponse<SiteSettingDto>.SuccessResponse(setting, "Site setting retrieved successfully"));
     }
 
+    // Palettes are theme data every signed-in user needs; writes stay permission-protected.
     [HttpGet("palette/{key}")]
-    [Authorize(Policy = Permissions.SiteSettingsRead)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPalette(string key, CancellationToken cancellationToken)
     {
         var setting = await _siteSettingService.GetByKeyAsync(key, cancellationToken);
-        if (setting is null) return NotFound(ApiResponse.FailureResponse("Palette not found", StatusCodes.Status404NotFound));
+        // An unconfigured palette means "use the default theme", not an error.
+        if (setting is null) return Ok(ApiResponse<object>.SuccessResponse(new Dictionary<string, string>(), "Palette not configured"));
 
         try
         {
@@ -81,6 +82,7 @@ public sealed class SiteSettingsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = Permissions.SiteSettingsCreate)]
     [ProducesResponseType(typeof(ApiResponse<SiteSettingDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateOrUpdate([FromBody] SiteSettingDto dto, CancellationToken cancellationToken)
     {
@@ -89,6 +91,7 @@ public sealed class SiteSettingsController : ControllerBase
     }
 
     [HttpDelete("{id:long}")]
+    [Authorize(Policy = Permissions.SiteSettingsDelete)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> Delete(long id, CancellationToken cancellationToken)
     {

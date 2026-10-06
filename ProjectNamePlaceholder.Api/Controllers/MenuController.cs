@@ -1,83 +1,91 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectNamePlaceholder.Api.Common;
 using ProjectNamePlaceholder.Application.Menu;
 using ProjectNamePlaceholder.Application.Security;
 
-namespace ProjectNamePlaceholder.Api.Controllers
+namespace ProjectNamePlaceholder.Api.Controllers;
+
+[ApiController]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[Authorize]
+public sealed class MenuController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class MenuController(IMenuService menuService) : ControllerBase
+    private readonly IMenuService _menuService;
+
+    public MenuController(IMenuService menuService)
     {
+        _menuService = menuService;
+    }
 
-        [HttpGet]
-        [Authorize]
-        [ProducesResponseType(typeof(ApiResponse<dynamic>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetMenu()
+    [HttpGet]
+    [ProducesResponseType(typeof(ApiResponse<dynamic>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetMenu(CancellationToken cancellationToken)
+    {
+        var menu = await _menuService.GetMenuForUserAsync(User, cancellationToken);
+        return Ok(ApiResponse<dynamic>.SuccessResponse(menu, "Menu retrieved successfully"));
+    }
+
+    [HttpGet("all")]
+    [Authorize(Policy = Permissions.MenusRead)]
+    [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<MenuDto>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var menus = await _menuService.GetAllAsync(cancellationToken);
+        return Ok(ApiResponse<IReadOnlyList<MenuDto>>.SuccessResponse(menus, "Menus retrieved"));
+    }
+
+    [HttpGet("{id:long}")]
+    [Authorize(Policy = Permissions.MenusRead)]
+    [ProducesResponseType(typeof(ApiResponse<MenuDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById([FromRoute] long id, CancellationToken cancellationToken)
+    {
+        var menu = await _menuService.GetByIdAsync(id, cancellationToken);
+        if (menu == null) return NotFound(ApiResponse.FailureResponse("Menu not found", StatusCodes.Status404NotFound));
+        return Ok(ApiResponse<MenuDto>.SuccessResponse(menu, "Menu retrieved"));
+    }
+
+    [HttpPost]
+    [Authorize(Policy = Permissions.MenusCreate)]
+    [ProducesResponseType(typeof(ApiResponse<MenuDto>), StatusCodes.Status201Created)]
+    public async Task<IActionResult> Create([FromBody] CreateMenuRequestDto request, CancellationToken cancellationToken)
+    {
+        var created = await _menuService.CreateAsync(request, cancellationToken);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, ApiResponse<MenuDto>.SuccessResponse(created, "Menu created", StatusCodes.Status201Created));
+    }
+
+    [HttpPut("{id:long}")]
+    [Authorize(Policy = Permissions.MenusUpdate)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Update([FromRoute] long id, [FromBody] UpdateMenuRequestDto request, CancellationToken cancellationToken)
+    {
+        try
         {
-            var menu = await menuService.GetMenuForUserAsync(User);
-            return Ok(ApiResponse<dynamic>.SuccessResponse(menu, "Menu retrieved successfully"));
+            await _menuService.UpdateAsync(id, request, cancellationToken);
+            return NoContent();
         }
-
-        [HttpGet("all")]
-        [Authorize(Policy = Permissions.MenusRead)]
-        [ProducesResponseType(typeof(ApiResponse<List<MenuDto>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll()
+        catch (KeyNotFoundException)
         {
-            var menus = await menuService.GetAllAsync();
-            return Ok(ApiResponse<List<MenuDto>>.SuccessResponse(menus, "Menus retrieved"));
+            return NotFound(ApiResponse.FailureResponse("Menu not found", StatusCodes.Status404NotFound));
         }
+    }
 
-        [HttpGet("{id:long}")]
-        [Authorize(Policy = Permissions.MenusRead)]
-        [ProducesResponseType(typeof(ApiResponse<MenuDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetById([FromRoute] long id)
+    [HttpDelete("{id:long}")]
+    [Authorize(Policy = Permissions.MenusDelete)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Delete([FromRoute] long id, CancellationToken cancellationToken)
+    {
+        try
         {
-            var menu = await menuService.GetByIdAsync(id);
-            if (menu == null) return NotFound(ApiResponse.FailureResponse("Menu not found", 404));
-            return Ok(ApiResponse<MenuDto>.SuccessResponse(menu, "Menu retrieved"));
+            await _menuService.DeleteAsync(id, cancellationToken);
+            return NoContent();
         }
-
-        [HttpPost]
-        [Authorize(Policy = Permissions.MenusCreate)]
-        [ProducesResponseType(typeof(ApiResponse<MenuDto>), StatusCodes.Status201Created)]
-        public async Task<IActionResult> Create([FromBody] CreateMenuRequestDto request)
+        catch (KeyNotFoundException)
         {
-            var created = await menuService.CreateAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, ApiResponse<MenuDto>.SuccessResponse(created, "Menu created", 201));
-        }
-
-        [HttpPut("{id:long}")]
-        [Authorize(Policy = Permissions.MenusUpdate)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Update([FromRoute] long id, [FromBody] UpdateMenuRequestDto request)
-        {
-            try
-            {
-                await menuService.UpdateAsync(id, request);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(ApiResponse.FailureResponse("Menu not found", 404));
-            }
-        }
-
-        [HttpDelete("{id:long}")]
-        [Authorize(Policy = Permissions.MenusDelete)]
-        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Delete([FromRoute] long id)
-        {
-            try
-            {
-                await menuService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(ApiResponse.FailureResponse("Menu not found", 404));
-            }
+            return NotFound(ApiResponse.FailureResponse("Menu not found", StatusCodes.Status404NotFound));
         }
     }
 }

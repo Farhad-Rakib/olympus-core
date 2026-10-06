@@ -4,6 +4,7 @@ public sealed class Notification : BaseEntity
 {
     public long UserId { get; set; }
     public string Type { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
     public string Message { get; set; } = string.Empty;
     public bool IsRead { get; set; }
 
@@ -11,10 +12,11 @@ public sealed class Notification : BaseEntity
 
     private Notification() { }
 
-    public Notification(long userId, string type, string message)
+    public Notification(long userId, string type, string title, string message)
     {
         UserId = userId;
         Type = !string.IsNullOrWhiteSpace(type) ? type : throw new ArgumentException("Type is required.", nameof(type));
+        Title = !string.IsNullOrWhiteSpace(title) ? title : throw new ArgumentException("Title is required.", nameof(title));
         Message = !string.IsNullOrWhiteSpace(message) ? message : throw new ArgumentException("Message is required.", nameof(message));
         IsRead = false;
     }

@@ -25,7 +25,12 @@ public static class DefaultSiteSettingsSeeder
             new SiteSetting { Key = "Smtp.Username", Value = "user@example.com", Description = "SMTP username" },
             new SiteSetting { Key = "Smtp.Password", Value = "password", Description = "SMTP password" },
             new SiteSetting { Key = "Smtp.FromEmail", Value = "noreply@example.com", Description = "SMTP from email address" },
-            new SiteSetting { Key = "Smtp.FromName", Value = "OlympusCore", Description = "SMTP from name" }
+            new SiteSetting { Key = "Smtp.FromName", Value = "OlympusCore", Description = "SMTP from name" },
+            // External sign-in buttons; a provider also needs ExternalAuth:Providers:<id> credentials in configuration.
+            new SiteSetting { Key = "Auth.Google.Enabled", Value = "false", Description = "Show 'Continue with Google' on the login page" },
+            new SiteSetting { Key = "Auth.LinkedIn.Enabled", Value = "false", Description = "Show 'Continue with LinkedIn' on the login page" },
+            new SiteSetting { Key = "Auth.Microsoft.Enabled", Value = "false", Description = "Show 'Continue with Microsoft' on the login page" },
+            new SiteSetting { Key = "Auth.GitHub.Enabled", Value = "false", Description = "Show 'Continue with GitHub' on the login page" }
         };
 
         foreach (var setting in settings)

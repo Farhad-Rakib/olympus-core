@@ -1,0 +1,65 @@
+@page
+@model ProjectNamePlaceholder.Api.Pages.AuditLogsModel
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Audit Logs</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h1>Audit Logs</h1>
+    <div>
+        <label>Action filter: <input id="actionFilter" /></label>
+        <button id="reload">Reload</button>
+    </div>
+    <div id="status"></div>
+    <table id="logsTable">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>User</th>
+                <th>Action</th>
+                <th>Path</th>
+                <th>Method</th>
+                <th>Resp</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        async function load(action) {
+            document.getElementById('status').innerText = 'Loading...';
+            try {
+                const url = '/api/v1/audit' + (action ? '?action=' + encodeURIComponent(action) : '');
+                const resp = await fetch(url, { credentials: 'include' });
+                const json = await resp.json();
+                const items = json.data?.Items ?? json.data?.items ?? json?.Items ?? json?.items ?? [];
+                const tbody = document.querySelector('#logsTable tbody');
+                tbody.innerHTML = '';
+                for (const it of items) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${new Date(it.timestamp).toLocaleString()}</td><td>${it.userName ?? it.userId ?? ''}</td><td>${it.action}</td><td>${it.path}</td><td>${it.method}</td><td>${it.statusCode ?? ''}</td>`;
+                    tbody.appendChild(tr);
+                }
+                document.getElementById('status').innerText = '';
+            } catch (e) {
+                document.getElementById('status').innerText = 'Error loading logs';
+            }
+        }
+
+        document.getElementById('reload').addEventListener('click', () => load(document.getElementById('actionFilter').value));
+        load();
+    </script>
+</body>
+</html>

@@ -19,6 +19,8 @@ namespace ProjectNamePlaceholder.Persistence.Seeding
             await UpsertMenuAsync(dbContext, "Role Permissions", "/roles/permissions", "role-permissions", Permissions.RolePermissionsRead, configuration);
             // Example additional menu: Reports (requires reports.read permission)
             await UpsertMenuAsync(dbContext, "Reports", "/reports", "chart-bar", Permissions.ReportsRead, configuration);
+            // Audit Logs menu
+            await UpsertMenuAsync(dbContext, "Audit Logs", "/audit-logs", "shield", Permissions.AuditRead, configuration);
 
             await dbContext.SaveChangesAsync();
         }

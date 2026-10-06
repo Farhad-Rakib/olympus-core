@@ -42,7 +42,13 @@ builder.Host.UseSerilog((context, _, configuration) =>
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ProjectNamePlaceholder.Api.Filters.AuditActionFilter>();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ProjectNamePlaceholder.Api.Filters.AuditActionFilter>();
+});
+builder.Services.AddRazorPages();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApiVersioning(options =>
 {
@@ -177,6 +183,20 @@ builder.Services
             ValidAudience = jwtOptions.Audience,
             ClockSkew = TimeSpan.Zero
         };
+
+        // Browsers cannot send headers on WebSocket/SSE connections, so SignalR passes the token in the query string.
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                if (!string.IsNullOrEmpty(accessToken) && context.HttpContext.Request.Path.StartsWithSegments("/hubs"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization(options =>
@@ -193,13 +213,15 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, SelfOrPermissionAuthorizationHandler>();
+builder.Services.AddScoped<ProjectNamePlaceholder.Application.Notifications.INotificationPublisher, ProjectNamePlaceholder.Api.Hubs.SignalRNotificationPublisher>();
 builder.Services.AddScoped<ProjectNamePlaceholder.Api.Startup.MenuPermissionValidator>();
 builder.Services.AddScoped<ProjectNamePlaceholder.Api.Startup.PermissionSyncService>();
 
 var app = builder.Build();
 
-app.UseExceptionHandler();
+// Request logging wraps the exception handler so it records the final (handled) status code.
 app.UseSerilogRequestLogging();
+app.UseExceptionHandler();
 app.UseRouting();
 
 // CORS must be placed before authentication/authorization middleware
@@ -224,6 +246,7 @@ app.UseAuthorization();
 
 app.MapHealthChecks("/health");
 app.MapControllers();
+app.MapRazorPages();
 app.MapHub<ProjectNamePlaceholder.Api.Hubs.NotificationHub>("/hubs/notifications");
 
 

@@ -13,6 +13,7 @@ public sealed class NotificationConfiguration : IEntityTypeConfiguration<Notific
         builder.HasKey(x => x.Id);
         builder.Property(x => x.UserId).IsRequired();
         builder.Property(x => x.Type).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.Title).HasMaxLength(200).IsRequired();
         builder.Property(x => x.Message).HasMaxLength(1000).IsRequired();
         builder.Property(x => x.IsRead).HasDefaultValue(false);
         builder.Property(x => x.CreatedAt).IsRequired();
