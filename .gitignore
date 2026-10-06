@@ -10,3 +10,7 @@ TestResults/
 
 # Prompt files
 INITIAL_TEMPLATE_PROMPT.md
+
+# Python (E2E test scripts)
+__pycache__/
+*.pyc
