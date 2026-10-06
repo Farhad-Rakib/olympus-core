@@ -1,3 +1,4 @@
+using ProjectNamePlaceholder.Application.Common.Exceptions;
 using ProjectNamePlaceholder.Application.Common.Interfaces;
 using ProjectNamePlaceholder.Application.Permissions.Dtos;
 using ProjectNamePlaceholder.Application.Roles.Dtos;
@@ -70,7 +71,7 @@ public sealed class RoleService : IRoleService
     public async Task<RoleDto> UpdateAsync(long id, UpdateRoleRequestDto request, CancellationToken cancellationToken = default)
     {
         var role = await _roleRepository.GetByIdWithPermissionsAsync(id, cancellationToken)
-            ?? throw new InvalidOperationException("Role not found.");
+            ?? throw new NotFoundException("Role not found.");
 
         if (!string.Equals(role.Name, request.Name, StringComparison.OrdinalIgnoreCase))
         {
@@ -92,7 +93,7 @@ public sealed class RoleService : IRoleService
     public async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
     {
         var role = await _roleRepository.GetByIdAsync(id, cancellationToken)
-            ?? throw new InvalidOperationException("Role not found.");
+            ?? throw new NotFoundException("Role not found.");
 
         _roleRepository.Delete(role);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -108,7 +109,7 @@ public sealed class RoleService : IRoleService
             return cached;
 
         var role = await _roleRepository.GetByIdWithPermissionsAsync(roleId, cancellationToken)
-            ?? throw new InvalidOperationException("Role not found.");
+            ?? throw new NotFoundException("Role not found.");
 
         var result = role.RolePermissions
             .Select(rolePermission => new PermissionDto(
@@ -125,7 +126,7 @@ public sealed class RoleService : IRoleService
     public async Task<RoleDto> ReplacePermissionsAsync(long roleId, UpdateRolePermissionsRequestDto request, CancellationToken cancellationToken = default)
     {
         var role = await _roleRepository.GetByIdWithPermissionsAsync(roleId, cancellationToken)
-            ?? throw new InvalidOperationException("Role not found.");
+            ?? throw new NotFoundException("Role not found.");
 
         var permissions = await GetPermissionsByIdsAsync(request.PermissionIds, cancellationToken);
         role.RolePermissions.Clear();
@@ -155,7 +156,7 @@ public sealed class RoleService : IRoleService
     public async Task<RoleDto> AddPermissionAsync(long roleId, long permissionId, CancellationToken cancellationToken = default)
     {
         var role = await _roleRepository.GetByIdWithPermissionsAsync(roleId, cancellationToken)
-            ?? throw new InvalidOperationException("Role not found.");
+            ?? throw new NotFoundException("Role not found.");
 
         var permission = await GetPermissionByIdAsync(permissionId, cancellationToken);
         if (role.RolePermissions.Any(x => x.PermissionId == permission.Id))
@@ -184,10 +185,10 @@ public sealed class RoleService : IRoleService
     public async Task<RoleDto> RemovePermissionAsync(long roleId, long permissionId, CancellationToken cancellationToken = default)
     {
         var role = await _roleRepository.GetByIdWithPermissionsAsync(roleId, cancellationToken)
-            ?? throw new InvalidOperationException("Role not found.");
+            ?? throw new NotFoundException("Role not found.");
 
         var permissionLink = role.RolePermissions.FirstOrDefault(x => x.PermissionId == permissionId)
-            ?? throw new InvalidOperationException("Role permission not found.");
+            ?? throw new NotFoundException("Role permission not found.");
 
         role.RolePermissions.Remove(permissionLink);
         _roleRepository.Update(role);
@@ -205,14 +206,14 @@ public sealed class RoleService : IRoleService
         var existing = await _roleRepository.GetByNameAsync(name, cancellationToken);
         if (existing is not null && existing.Id != ignoreRoleId)
         {
-            throw new InvalidOperationException("Role name already exists.");
+            throw new ConflictException("Role name already exists.");
         }
     }
 
     private async Task<Permission> GetPermissionByIdAsync(long permissionId, CancellationToken cancellationToken)
     {
         return await _permissionRepository.GetByIdAsync(permissionId, cancellationToken)
-            ?? throw new InvalidOperationException("Permission not found.");
+            ?? throw new NotFoundException("Permission not found.");
     }
 
     private async Task<IReadOnlyList<Permission>> GetPermissionsByIdsAsync(IEnumerable<long> permissionIds, CancellationToken cancellationToken)

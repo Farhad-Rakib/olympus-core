@@ -1,3 +1,4 @@
+using ProjectNamePlaceholder.Application.Common.Exceptions;
 
 using ProjectNamePlaceholder.Application.Common.Interfaces;
 using ProjectNamePlaceholder.Application.Roles.Dtos;
@@ -69,7 +70,7 @@ public sealed class UserService : IUserService
     {
         var user = await _userRepository.GetByIdWithRolesAsync(userId, cancellationToken);
         if (user is null)
-            throw new InvalidOperationException("User not found.");
+            throw new NotFoundException("User not found.");
 
         user.UpdateProfile(request.FullName, request.Email, request.ProfileImageUrl);
         _userRepository.Update(user);
@@ -87,7 +88,7 @@ public sealed class UserService : IUserService
     public async Task<IReadOnlyList<RoleDto>> GetRolesAsync(long userId, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.GetByIdWithRolesAsync(userId, cancellationToken)
-            ?? throw new InvalidOperationException("User not found.");
+            ?? throw new NotFoundException("User not found.");
 
         return user.UserRoles
             .Select(userRole => new RoleDto(
@@ -101,7 +102,7 @@ public sealed class UserService : IUserService
     public async Task<UserDto> ReplaceRolesAsync(long userId, UpdateUserRolesRequestDto request, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.GetByIdWithRolesAsync(userId, cancellationToken)
-            ?? throw new InvalidOperationException("User not found.");
+            ?? throw new NotFoundException("User not found.");
 
         var roles = await GetRolesByIdsAsync(request.RoleIds, cancellationToken);
         user.SetRoles(roles.Select(role => new UserRole
@@ -121,7 +122,7 @@ public sealed class UserService : IUserService
     public async Task<UserDto> AddRoleAsync(long userId, long roleId, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.GetByIdWithRolesAsync(userId, cancellationToken)
-            ?? throw new InvalidOperationException("User not found.");
+            ?? throw new NotFoundException("User not found.");
 
         var role = await GetRoleByIdAsync(roleId, cancellationToken);
         if (user.UserRoles.Any(userRole => userRole.RoleId == role.Id))
@@ -148,10 +149,10 @@ public sealed class UserService : IUserService
     public async Task<UserDto> RemoveRoleAsync(long userId, long roleId, CancellationToken cancellationToken = default)
     {
         var user = await _userRepository.GetByIdWithRolesAsync(userId, cancellationToken)
-            ?? throw new InvalidOperationException("User not found.");
+            ?? throw new NotFoundException("User not found.");
 
         var userRole = user.UserRoles.FirstOrDefault(userRole => userRole.RoleId == roleId)
-            ?? throw new InvalidOperationException("User role not found.");
+            ?? throw new NotFoundException("User role not found.");
 
         var updatedRoles = user.UserRoles.Where(userRole => userRole.RoleId != roleId).ToList();
         user.SetRoles(updatedRoles);
@@ -164,7 +165,7 @@ public sealed class UserService : IUserService
     private async Task<Role> GetRoleByIdAsync(long roleId, CancellationToken cancellationToken)
     {
         return await _roleRepository.GetByIdWithPermissionsAsync(roleId, cancellationToken)
-            ?? throw new InvalidOperationException("Role not found.");
+            ?? throw new NotFoundException("Role not found.");
     }
 
     private async Task<IReadOnlyList<Role>> GetRolesByIdsAsync(IEnumerable<long> roleIds, CancellationToken cancellationToken)
@@ -183,7 +184,7 @@ public sealed class UserService : IUserService
     private async Task<UserDto> MapUserAsync(long userId, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdWithRolesAsync(userId, cancellationToken)
-            ?? throw new InvalidOperationException("User not found.");
+            ?? throw new NotFoundException("User not found.");
 
         return new UserDto(
             user.Id,

@@ -1,3 +1,4 @@
+using ProjectNamePlaceholder.Application.Common.Exceptions;
 using ProjectNamePlaceholder.Application.Common.Interfaces;
 using ProjectNamePlaceholder.Application.Permissions.Dtos;
 using ProjectNamePlaceholder.Domain.Entities;
@@ -57,7 +58,7 @@ public sealed class PermissionService : IPermissionService
     public async Task<PermissionDto> UpdateAsync(long id, UpdatePermissionRequestDto request, CancellationToken cancellationToken = default)
     {
         var permission = await _permissionRepository.GetByIdAsync(id, cancellationToken)
-            ?? throw new InvalidOperationException("Permission not found.");
+            ?? throw new NotFoundException("Permission not found.");
 
         if (!string.Equals(permission.Name, request.Name, StringComparison.OrdinalIgnoreCase))
         {
@@ -77,7 +78,7 @@ public sealed class PermissionService : IPermissionService
     public async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
     {
         var permission = await _permissionRepository.GetByIdAsync(id, cancellationToken)
-            ?? throw new InvalidOperationException("Permission not found.");
+            ?? throw new NotFoundException("Permission not found.");
 
         _permissionRepository.Delete(permission);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -91,7 +92,7 @@ public sealed class PermissionService : IPermissionService
         var existing = await _permissionRepository.GetByNameAsync(name, cancellationToken);
         if (existing is not null && existing.Id != ignorePermissionId)
         {
-            throw new InvalidOperationException("Permission name already exists.");
+            throw new ConflictException("Permission name already exists.");
         }
     }
 
