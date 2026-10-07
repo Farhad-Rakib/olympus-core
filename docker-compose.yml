@@ -10,7 +10,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: https://+:5001;http://+:5000
+#if (database == "postgres")
       ConnectionStrings__PostgresConnection: ${DEV_DB_CONNECTION_STRING:-Host=your-db-host;Port=5432;Database=ProjectNamePlaceholderDb;Username=postgres;Password=postgres}
+#endif
+#if (database == "sqlserver")
+      ConnectionStrings__SqlServerConnection: ${DEV_DB_CONNECTION_STRING:-Server=your-db-host,1433;Database=ProjectNamePlaceholderDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True}
+#endif
       Jwt__SecretKey: your-super-secret-key-must-be-at-least-32-characters-long
       Jwt__Issuer: ProjectNamePlaceholder
       Jwt__Audience: ProjectNamePlaceholder.Client
@@ -41,7 +46,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
       ASPNETCORE_URLS: https://+:5001
+#if (database == "postgres")
       ConnectionStrings__PostgresConnection: ${STAGING_DB_CONNECTION_STRING:-Host=your-db-host;Port=5432;Database=ProjectNamePlaceholderDb;Username=postgres;Password=postgres}
+#endif
+#if (database == "sqlserver")
+      ConnectionStrings__SqlServerConnection: ${STAGING_DB_CONNECTION_STRING:-Server=your-db-host,1433;Database=ProjectNamePlaceholderDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True}
+#endif
       Jwt__SecretKey: staging-super-secret-key-must-be-at-least-32-characters-long
       Jwt__Issuer: ProjectNamePlaceholder
       Jwt__Audience: ProjectNamePlaceholder.Client
@@ -65,7 +75,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: https://+:5001
+#if (database == "postgres")
       ConnectionStrings__PostgresConnection: ${PROD_DB_CONNECTION_STRING:-Host=your-db-host;Port=5432;Database=ProjectNamePlaceholderDb;Username=postgres;Password=postgres}
+#endif
+#if (database == "sqlserver")
+      ConnectionStrings__SqlServerConnection: ${PROD_DB_CONNECTION_STRING:-Server=your-db-host,1433;Database=ProjectNamePlaceholderDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True}
+#endif
       Jwt__SecretKey: production-super-secret-key-must-be-at-least-32-characters-long
       Jwt__Issuer: ProjectNamePlaceholder
       Jwt__Audience: ProjectNamePlaceholder.Client

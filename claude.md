@@ -18,7 +18,7 @@ This repository is a layered ASP.NET Core API built around `ProjectNamePlacehold
 - The API exposes Swagger in development and enables SignalR notifications.
 - CORS allows `http://localhost:5173` in development.
 - Caching can use Redis when `Caching:UseRedis` is enabled; otherwise memory cache is used.
-- Database provider is selected with `Database:Provider` and supports `postgres` or `sqlserver`.
+- Database provider is selected with `Database:Provider` (optional; defaults to the provider the project was generated with) and supports `postgres` or `sqlserver`.
 - Startup performs database bootstrap, menu-permission validation, and permission sync.
 
 ## Important Configuration Keys

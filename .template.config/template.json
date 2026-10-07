@@ -42,6 +42,18 @@
             "src/ProjectNamePlaceholder.Persistence/Seeding/EfCoreDatabaseBootstrapper.cs",
             "src/ProjectNamePlaceholder.Persistence/Seeding/RbacSeeder.cs"
           ]
+        },
+        {
+          "condition": "(database == \"sqlserver\")",
+          "exclude": [
+            "**/ProjectNamePlaceholder.Persistence/Migrations/*.cs"
+          ]
+        },
+        {
+          "condition": "(database == \"postgres\")",
+          "exclude": [
+            "**/ProjectNamePlaceholder.Persistence/Migrations/SqlServer/**"
+          ]
         }
       ]
     }

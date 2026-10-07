@@ -56,9 +56,18 @@ public static class DependencyInjection
         return services;
     }
 
+    // The template compiles in a single provider; Database:Provider is only an optional override.
+//-:cnd:noEmit
+#if OLYMPUS_DB_SQLSERVER && !OLYMPUS_DB_POSTGRES
+    private const string DefaultProvider = "sqlserver";
+#else
+    private const string DefaultProvider = "postgres";
+#endif
+//+:cnd:noEmit
+
     private static string GetProvider(IConfiguration configuration)
     {
-        var provider = (configuration["Database:Provider"] ?? "postgres").ToLowerInvariant();
+        var provider = (configuration["Database:Provider"] ?? DefaultProvider).ToLowerInvariant();
         if (provider is not ("postgres" or "sqlserver"))
         {
             throw new InvalidOperationException($"Unsupported database provider '{provider}'. Supported values: postgres, sqlserver.");

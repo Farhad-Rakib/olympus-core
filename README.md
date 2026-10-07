@@ -56,7 +56,7 @@ dotnet new olympuscore -n MyCompany.Orders --database postgres --orm efcore --en
 Edit the generated API settings file to configure:
 
 - DataAccess:Orm
-- Database:Provider
+- Database:Provider (optional; defaults to the provider chosen at `dotnet new` time)
 - ConnectionStrings:PostgresConnection
 - ConnectionStrings:SqlServerConnection
 - Jwt:SecretKey (min 32 chars recommended)

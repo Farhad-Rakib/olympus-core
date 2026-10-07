@@ -7,7 +7,13 @@ public sealed class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Ap
 {
     public ApplicationDbContext CreateDbContext(string[] args)
     {
-        var provider = "postgres".ToLowerInvariant();
+//-:cnd:noEmit
+#if OLYMPUS_DB_SQLSERVER && !OLYMPUS_DB_POSTGRES
+        var provider = "sqlserver";
+#else
+        var provider = "postgres";
+#endif
+//+:cnd:noEmit
 
     //#if (database == "postgres")
         const string postgresConnection = "Host=localhost;Port=5432;Database=ProjectNamePlaceholderDb;Username=postgres;Password=postgres";
