@@ -65,6 +65,10 @@ public static class DependencyInjection
 #endif
 //+:cnd:noEmit
 
+    /// <summary>The ConnectionStrings key the active database provider reads.</summary>
+    public static string GetConnectionStringName(IConfiguration configuration) =>
+        GetProvider(configuration) == "sqlserver" ? "SqlServerConnection" : "PostgresConnection";
+
     private static string GetProvider(IConfiguration configuration)
     {
         var provider = (configuration["Database:Provider"] ?? DefaultProvider).ToLowerInvariant();

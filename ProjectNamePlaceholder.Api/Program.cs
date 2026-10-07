@@ -164,6 +164,11 @@ builder.Services.AddScoped<ProjectNamePlaceholder.Api.Startup.RedisCacheAdminSer
 builder.Services.AddSingleton<ProjectNamePlaceholder.Api.Startup.CacheKeyRegistry>();
 builder.Services.AddScoped<ProjectNamePlaceholder.Api.Startup.DistributedCacheAdminService>();
 
+if (!builder.Environment.IsDevelopment())
+{
+    ProjectNamePlaceholder.Api.Startup.RequiredSettingsValidator.Validate(builder.Configuration);
+}
+
 var jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>() ?? new JwtOptions();
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey));
 

@@ -28,7 +28,7 @@ Complete checklist for setting up the GitLab CI/CD pipeline for ProjectNamePlace
 
 - [ ] Copy `appsettings.Staging.json` to `ProjectNamePlaceholder.Api/`
 - [ ] Copy `appsettings.Production.json` to `ProjectNamePlaceholder.Api/`
-- [ ] Verify appsettings files use environment variables
+- [ ] Leave secrets empty in appsettings.Staging/Production.json; supply them as environment variables (the API refuses to start outside Development if the connection string, Jwt:SecretKey, Smtp:Host or Smtp:FromAddress is missing)
 - [ ] Test local build with `dotnet build`
 - [ ] Test local publish with `dotnet publish`
 
