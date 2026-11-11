@@ -24,12 +24,12 @@ public sealed class SqlConnectionFactory : ISqlConnectionFactory
     {
         DbConnection connection = Provider switch
         {
-//#if (database == "sqlserver")
+            //#if (database == "sqlserver")
             "sqlserver" => new SqlConnection(_connectionString),
-//#endif
-//#if (database == "postgres")
+            //#endif
+            //#if (database == "postgres")
             "postgres" => new NpgsqlConnection(_connectionString),
-//#endif
+            //#endif
             _ => throw new InvalidOperationException($"Unsupported database provider '{Provider}'.")
         };
 

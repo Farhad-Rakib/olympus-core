@@ -106,7 +106,7 @@ public sealed class UsersController : ControllerBase
         var user = await _userService.RemoveRoleAsync(id, roleId, cancellationToken);
         return Ok(ApiResponse<UserDto>.SuccessResponse(user, "User role removed successfully"));
     }
- 
+
     private long GetCurrentUserId()
     {
         var userIdClaim = User.FindFirst("sub") ?? User.FindFirst("id") ?? User.FindFirst("userId");

@@ -13,13 +13,13 @@ public static class SerilogConfigurationExtensions
             .WriteTo.Console()
             .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day);
 
-//#if (enableSeq)
+        //#if (enableSeq)
         var enableSeq = configuration.GetValue<bool?>("Serilog:EnableSeq") ?? true;
         if (enableSeq)
         {
             configuredLogger = configuredLogger.WriteTo.Seq(configuration["Serilog:SeqServerUrl"] ?? "http://localhost:5341");
         }
-//#endif
+        //#endif
 
         return configuredLogger;
     }

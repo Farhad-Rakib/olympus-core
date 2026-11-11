@@ -5,7 +5,7 @@ using ProjectNamePlaceholder.Application.SiteSettings;
 using ProjectNamePlaceholder.Application.SiteSettings.Dtos;
 using ProjectNamePlaceholder.Application.Security;
 
-    
+
 
 namespace ProjectNamePlaceholder.Api.Controllers;
 

@@ -11,9 +11,9 @@ public sealed class RoleService : IRoleService
     private readonly IRoleRepository _roleRepository;
     private readonly IPermissionRepository _permissionRepository;
     private readonly IUnitOfWork _unitOfWork;
-        private readonly ProjectNamePlaceholder.Application.Common.Interfaces.IAppCache _cache;
+    private readonly ProjectNamePlaceholder.Application.Common.Interfaces.IAppCache _cache;
 
-        private readonly TimeSpan RoleCacheTtl;
+    private readonly TimeSpan RoleCacheTtl;
 
     public RoleService(
         IRoleRepository roleRepository,

@@ -57,13 +57,13 @@ public static class DependencyInjection
     }
 
     // The template compiles in a single provider; Database:Provider is only an optional override.
-//-:cnd:noEmit
+    //-:cnd:noEmit
 #if OLYMPUS_DB_SQLSERVER && !OLYMPUS_DB_POSTGRES
     private const string DefaultProvider = "sqlserver";
 #else
     private const string DefaultProvider = "postgres";
 #endif
-//+:cnd:noEmit
+    //+:cnd:noEmit
 
     /// <summary>The ConnectionStrings key the active database provider reads.</summary>
     public static string GetConnectionStringName(IConfiguration configuration) =>

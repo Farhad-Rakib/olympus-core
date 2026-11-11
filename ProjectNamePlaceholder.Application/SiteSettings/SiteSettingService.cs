@@ -58,7 +58,7 @@ public sealed class SiteSettingService : ISiteSettingService
         {
             var created = new SiteSetting
             {
-                Id =  dto.Id,
+                Id = dto.Id,
                 Key = dto.Key ?? string.Empty,
                 Value = dto.Value ?? string.Empty,
                 Description = dto.Description

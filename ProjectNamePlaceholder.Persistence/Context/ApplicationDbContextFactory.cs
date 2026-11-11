@@ -7,33 +7,33 @@ public sealed class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Ap
 {
     public ApplicationDbContext CreateDbContext(string[] args)
     {
-//-:cnd:noEmit
+        //-:cnd:noEmit
 #if OLYMPUS_DB_SQLSERVER && !OLYMPUS_DB_POSTGRES
         var provider = "sqlserver";
 #else
         var provider = "postgres";
 #endif
-//+:cnd:noEmit
+        //+:cnd:noEmit
 
-    //#if (database == "postgres")
+        //#if (database == "postgres")
         const string postgresConnection = "Host=localhost;Port=5432;Database=ProjectNamePlaceholderDb;Username=postgres;Password=postgres";
-    //#endif
-    //#if (database == "sqlserver")
+        //#endif
+        //#if (database == "sqlserver")
         const string sqlServerConnection = "Server=localhost,1433;Database=ProjectNamePlaceholderDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True";
-    //#endif
+        //#endif
 
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-    //#if (database == "sqlserver")
+        //#if (database == "sqlserver")
         if (provider == "sqlserver")
         {
             optionsBuilder.UseSqlServer(sqlServerConnection);
         }
-    //#elseif (database == "postgres")
+        //#elseif (database == "postgres")
         if (provider == "postgres")
         {
             optionsBuilder.UseNpgsql(postgresConnection);
         }
-    //#endif
+        //#endif
         else
         {
             throw new InvalidOperationException($"Unsupported database provider '{provider}'. Supported values: postgres, sqlserver.");

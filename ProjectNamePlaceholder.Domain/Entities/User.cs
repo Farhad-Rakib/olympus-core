@@ -35,7 +35,7 @@ public sealed class User : BaseEntity
         UserRoles = roles.ToList();
     }
 
-  
+
 
     public void Disable()
     {

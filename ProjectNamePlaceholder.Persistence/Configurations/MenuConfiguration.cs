@@ -9,7 +9,7 @@ namespace ProjectNamePlaceholder.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Menu> builder)
         {
             builder.ToTable("menus");
-            
+
             builder.HasKey(m => m.Id);
             builder.Property(m => m.Title).IsRequired().HasMaxLength(100);
             builder.Property(m => m.Url).HasMaxLength(200);
